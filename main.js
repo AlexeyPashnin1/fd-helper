@@ -130,7 +130,7 @@ document.addEventListener('keydown', function (e) {
         document.querySelector('.timer-pop-up').remove();
 });
 
-document.addEventListener('click', function (e) {
+document.addEventListener('mousedown', function (e) {
     if (!e.target.classList.contains('tpu') && document.querySelector('.timer-pop-up'))
         document.querySelector('.timer-pop-up').remove();
 });
