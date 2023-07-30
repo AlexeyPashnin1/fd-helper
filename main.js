@@ -102,6 +102,7 @@ function waitForLog() {
         setTimeout(waitForLog, 100);
     }
 }
+
 function showTimer() {
     if (localStorage.getItem(`snizeTimer${ticketID}`)) {
         let timerStarted = new Date(localStorage.getItem(`snizeTimer${ticketID}`));
