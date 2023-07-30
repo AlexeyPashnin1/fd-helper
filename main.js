@@ -105,7 +105,7 @@ function showTimer() {
             .outerHTML = `<div class="tpu timer-pop-up" style="font-weight: bold;padding:10px;background: white;height: 80px;width: 150px;position: fixed;top: 50%;right: 50%;z-index: 9;font-size: 20px;display: flex;align-content: center;flex-wrap: wrap;color:black;justify-content: space-between;align-items: center;box-shadow: 0 0 7px 1px;border-radius: 10px;">
                 <span class="tpu timer-time" style="cursor: pointer;"onmouseover="this.style.color='red';"onmouseout="this.style.color='black';">${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}</span>
                 <span class="tpu check" style="opacity: 0;transition-duration: 0.1s;position: absolute;top: 10px;left: 43%;color: green;"> ✔</span>
-                <button style="height: 100%;position: absolute;right: 2px;border-left: 2px solid black!important;cursor: pointer; font-size: 25px;border: none; background: none;"onmouseover="this.style.color='red';"onmouseout="this.style.color='black'">X</button>
+                <button style="padding: 0px 8px;height: 100%;position: absolute;right: 0;border-left: 1px solid black!important;cursor: pointer; font-size: 25px;border: none; background: none;"onmouseover="this.style.color='red';"onmouseout="this.style.color='black'">X</button>
                 <span class="tpu timer-log-time" style="cursor: pointer; color: black;" onmouseover="this.style.color='red';" onmouseout="this.style.color='black'">LOG TIME</span>
                 </div>`;
         localStorage.setItem(`snizeSpentTime${ticketID}`, `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`);
