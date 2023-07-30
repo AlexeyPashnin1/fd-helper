@@ -136,6 +136,11 @@ function showTimer() {
 
 addSysClearQuotes();
 
+document.addEventListener('keydown', function (e) {
+    if(e.keyCode === 27 && document.querySelector('.timer-pop-up'))
+        document.querySelector('.timer-pop-up').remove();
+});
+
 function waitForObserve() {
     if (document.querySelectorAll('.user-meta').length
         || document.querySelectorAll('.ember-application').length
