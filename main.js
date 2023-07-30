@@ -1,14 +1,3 @@
-// ==UserScript==
-// @name         FD HELPER
-// @namespace    http://tampermonkey.net/
-// @version      0.7.1
-// @description  sys and admin panels links, the clear quotes button, direct links to notes, the timer
-// @author       apashnin
-// @match        https://searchanise.freshdesk.com/a/tickets/*
-// @match        https://searchanise.freshchat.com/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=freshdesk.com
-// ==/UserScript==
-
 let ticketID;
 
 function copyLink(event) {
