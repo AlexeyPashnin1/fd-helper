@@ -125,21 +125,14 @@ function showTimer() {
 
 addSysClearQuotes();
 
-// document.addEventListener('keydown', function (e) {
-//     if (e.keyCode === 27 && document.querySelector('.timer-pop-up'))
-//         document.querySelector('.timer-pop-up').remove();
-// });
+document.addEventListener('keydown', function (e) {
+    if (e.keyCode === 27 && document.querySelector('.timer-pop-up'))
+        document.querySelector('.timer-pop-up').remove();
+});
 
-// document.addEventListener('click', function (e) {
-//     if (!e.target.classList.contains('tpu') && document.querySelector('.timer-pop-up'))
-//         document.querySelector('.timer-pop-up').remove();
-// });
-
-document.addEventListener('keydown, click', function (e) {
-    if (document.querySelector('.timer-pop-up')) {
-        if (e.keyCode === 27 || !e.target.classList.contains('tpu'))
-            document.querySelector('.timer-pop-up').remove();
-    }
+document.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('tpu') && document.querySelector('.timer-pop-up'))
+        document.querySelector('.timer-pop-up').remove();
 });
 
 function waitForObserve() {
