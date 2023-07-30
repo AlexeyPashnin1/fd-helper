@@ -31,13 +31,12 @@ function addSysClearQuotes() {
             if (e.querySelector('.created-time') && !e.querySelector('.copy-note-link')) {
                 e.querySelector('.created-time').appendChild(document.createElement("span"))
                     .outerHTML = `<span class="copy-note-link">
-                    <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="color: inherit; cursor: pointer;">${noteID}</a>
-                    <a class="check" style="opacity: 0; transition-duration: 0.1s;"> ✔</a>
-                    </span>`;
+                        <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="color: inherit; cursor: pointer;">${noteID}</a>
+                        <a class="check" style="opacity: 0; transition-duration: 0.1s;"> ✔</a>
+                        </span>`;
             }
         })
     }
-
     if (document.querySelector('input[data-test-text-field="timeSpentDisp"]')) {
         if (localStorage.getItem(`snizeSpentTime${ticketID}`)) {
             document.querySelector('input[data-test-text-field="timeSpentDisp"]').value = localStorage.getItem(`snizeSpentTime${ticketID}`);
@@ -45,7 +44,6 @@ function addSysClearQuotes() {
             localStorage.removeItem(`snizeSpentTime${ticketID}`)
         }
     }
-
     document.querySelectorAll('.copy-note-link, .timer-pop-up span:not(.timer-log-time)').forEach(function (e) {
         e.removeEventListener('click', copyLink);
         e.addEventListener('click', copyLink);
@@ -58,21 +56,15 @@ function addSysClearQuotes() {
         ) {
             return;
         }
-
         let clientsEmail;
-
         document.querySelectorAll('.text__infotext').forEach(function (e) {
             if (e.innerText == 'Email') {
                 clientsEmail = encodeURIComponent(e.nextElementSibling.innerText);
             }
         });
-
         let engineIDFromText = document.querySelector('#ticket_original_request').innerText.split('Engine id:')[1] || false;
-
         if (engineIDFromText) {
-
             let engineID = engineIDFromText.match(/[0-9]{5,}/);
-
             document.querySelector('.status-cards-container')
                 .appendChild(document.createElement("span"))
                 .outerHTML = `<span class='snize-fd-helper app-icon-btn--text' style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger;padding: 0;"'>
@@ -89,18 +81,15 @@ function addSysClearQuotes() {
                     <a class="clear-quotes" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">CLEAR QUOTES</a>
                     </span>`;
         }
-
         document.querySelector('.clear-quotes').removeEventListener('click', clearQuotes);
         document.querySelector('.clear-quotes').addEventListener('click', clearQuotes);
-
     } else if (window.location.href.includes('https://searchanise.freshchat.com/')) {
         if (!document.querySelector('.main-custom-properties .right-column')
             || document.querySelector('.main-custom-properties .right-column a')
         ) {
             return;
         }
-
-        let engineID = document.querySelectorAll('.main-custom-properties .ember-tooltip-target')[1].innerText;
+        let engineID = document.querySelectorAll('.main-custom-properties .ember-tooltip-target')[1].innerText;     
         document.querySelector('.main-custom-properties .right-column').appendChild(document.createElement("a"));
         document.querySelector('.main-custom-properties .right-column a').outerHTML = `<a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/resources/engines/${engineID} target="_blank" rel="noopener noreferrer" style="color: inherit; font-weight: bold; font-size: larger;">SYSPANEL</a>`;
     }
