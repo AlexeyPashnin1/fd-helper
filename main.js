@@ -132,13 +132,21 @@ function showTimer() {
 addSysClearQuotes();
 
 document.addEventListener('keydown', function (e) {
-    if (e.keyCode === 27 && document.querySelector('.timer-pop-up'))
+    if (e.keyCode === 27
+        && document.querySelector('.timer-pop-up')
+        && !document.querySelector('.modal-overlay')
+       ) {
         document.querySelector('.timer-pop-up').remove();
+    }
 });
 
 document.addEventListener('mousedown', function (e) {
-    if (!e.target.classList.contains('tpu') && document.querySelector('.timer-pop-up'))
+    if (!e.target.classList.contains('tpu')
+        && document.querySelector('.timer-pop-up')
+        && !document.querySelector('.modal-overlay')
+       ) {
         document.querySelector('.timer-pop-up').remove();
+    }
 });
 
 function waitForObserve() {
