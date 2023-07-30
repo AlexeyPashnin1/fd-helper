@@ -113,7 +113,7 @@ function showTimer() {
         <span class="timer-time" style="cursor: pointer;"
         onmouseover="this.style.color='red';"
         onmouseout="this.style.color='black';">${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}</span>
-        <span class="check" style="opacity: 0;transition-duration: 0.1s;position: absolute;top: 10px;left: 43%;color: lightgreen;"> ✔</span>
+        <span class="check" style="opacity: 0;transition-duration: 0.1s;position: absolute;top: 10px;left: 43%;color: green;"> ✔</span>
     <button style="cursor: pointer; font-size: 25px;border: none; background: none;"
     onmouseover="this.style.color='red';"
     onmouseout="this.style.color='black'">X</button>
