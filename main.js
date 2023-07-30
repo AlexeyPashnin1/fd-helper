@@ -122,9 +122,6 @@ function showTimer() {
         });
         document.querySelector('.timer-log-time').addEventListener('click', function () {
             document.querySelector('#time-entries div[data-test-id="time-entries_title"]').click();
-            // setTimeout(function () {
-            //     document.querySelector('button[aria-label="Log time"]').click();
-            // }, 500);
             waitForLog();
             document.querySelector('.timer-pop-up').remove();
         });
