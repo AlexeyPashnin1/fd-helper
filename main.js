@@ -95,6 +95,13 @@ function addSysClearQuotes() {
     }
 }
 
+function waitForLog() {
+    if(document.querySelector('button[aria-label="Log time"]')) {
+        document.querySelector('button[aria-label="Log time"]').click();
+    } else {
+        setTimeout(waitForLog, 100);
+    }
+}
 function showTimer() {
     if (localStorage.getItem(`snizeTimer${ticketID}`)) {
         let timerStarted = new Date(localStorage.getItem(`snizeTimer${ticketID}`));
@@ -114,16 +121,9 @@ function showTimer() {
         });
         document.querySelector('.timer-log-time').addEventListener('click', function () {
             document.querySelector('#time-entries div[data-test-id="time-entries_title"]').click();
-            setTimeout(function () {
-                document.querySelector('button[aria-label="Log time"]').click();
-            }, 500);
-            function waitForLog() {
-                if(document.querySelector('button[aria-label="Log time"]')) {
-                    document.querySelector('button[aria-label="Log time"]').click();
-                } else {
-                    setTimeout(waitForLog, 100);
-                }
-            }
+            // setTimeout(function () {
+            //     document.querySelector('button[aria-label="Log time"]').click();
+            // }, 500);
             waitForLog();
             document.querySelector('.timer-pop-up').remove();
         });
