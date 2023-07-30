@@ -117,6 +117,14 @@ function showTimer() {
             setTimeout(function () {
                 document.querySelector('button[aria-label="Log time"]').click();
             }, 500);
+            function waitForLog() {
+                if(document.querySelector('button[aria-label="Log time"]')) {
+                    document.querySelector('button[aria-label="Log time"]').click();
+                } else {
+                    setTimeout(waitForLog, 100);
+                }
+            }
+            waitForLog();
             document.querySelector('.timer-pop-up').remove();
         });
         localStorage.removeItem(`snizeTimer${ticketID}`);
