@@ -150,14 +150,29 @@ document.addEventListener('mousedown', function (e) {
 });
 
 function waitForObserve() {
-    if (document.querySelector('.user-meta')
-        || document.querySelector('.ember-application')
-        && document.querySelector('.requestor-wrap')
-    ) {
-        ticketID = document.querySelector('.requestor-wrap').getAttribute('data-album').replace('ticket_', '');
+    if (document.querySelector('.ember-application')) {
+        if (document.querySelector('.requestor-wrap')) {
+            ticketID = document.querySelector('.requestor-wrap').getAttribute('data-album').replace('ticket_', '');
+        }
         let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         function trackChange(element) {
             var observer = new MutationObserver(function (mutations, observer) {
+                if (document.querySelector('#ember-basic-dropdown-wormhole div')
+                    && document.querySelector('.ticket-overlay-content-text')
+                    && document.querySelector('.ticket-overlay-content-text').innerText.match(/\.\.\.$/)
+                   ) {
+                    let ticketHoveredID = document.querySelector('table div.trigger-shortcuts[aria-expanded="true"]')
+                                            .getAttribute('data-test-id')
+                                            .replace('ticket-subject-hover-', '');
+                    document.querySelector('.ticket-overlay-content-text')
+                        .appendChild(document.createElement("a"))
+                        .outerHTML = `<a class="hovered-show-more" style="cursor: pointer;float: right;" ticket-hovered-id="${ticketHoveredID}">Show more</a>`;
+                    document.querySelector('.hovered-show-more').addEventListener('click', function(event) {
+                        fetch(`https://searchanise.freshdesk.com/api/_/tickets/${event.target.getAttribute('ticket-hovered-id')}/latest_note`)
+                            .then(d => d.json())
+                            .then(text => document.querySelector('.ticket-overlay-content-text').innerHTML = text.conversation.body_text);
+                    });
+                }
                 addSysClearQuotes();
                 if (document.querySelector('.ticket-editor__bodytext')
                     && !document.querySelector('.timer-pop-up')
