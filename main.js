@@ -26,33 +26,55 @@ function clearQuotes() {
 
 function addSysClearQuotes() {
     if (!document.querySelector('.conversation-dotted-loader')) {
-        document.querySelectorAll('div[data-test-id="conversation-wrapper"]').forEach(function (e) {
-            let noteID = e.getAttribute('data-album').replace('note_', '');
-            if (e.querySelector('.created-time') && !e.querySelector('.copy-note-link')) {
-                e.querySelector('.created-time').appendChild(document.createElement("span"))
-                    .outerHTML = `<span class="copy-note-link">
+        document.querySelectorAll('div[data-test-id="conversation-wrapper"], .requestor-wrap').forEach(function (e) {
+            let noteID = e.getAttribute('data-album').replace('note_', '').replace('ticket_', '');
+            if (e.querySelector('.created-time') && !e.querySelector('.show-raw')) {
+                if (!e.classList.contains('requestor-wrap')) {
+                    e.querySelector('.created-time').appendChild(document.createElement("span"))
+                        .outerHTML = `<span class="copy-note-link">
                         <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="color: inherit; cursor: pointer;">${noteID}</a>
                         <a class="check" style="opacity: 0; transition-duration: 0.1s;"> ✔</a>
-                        </span>
-                        <span class="show-raw" html-id="${noteID} "onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer; color: inherit; position: absolute; top: 18px; left: 0px;">show raw HTML</span>`;
+                        </span>`;
+                }
+                e.querySelector('.created-time').appendChild(document.createElement("span"))
+                    .outerHTML = `<span class="show-raw" html-id="${noteID} "onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer; color: inherit; position: absolute; top: 18px; left: 0px;">show raw HTML</span>`;
                 e.querySelector('.created-time .show-raw').addEventListener('click', function(event) {
                     if (!document.querySelector('.raw-html')) {
-                        fetch(`https://searchanise.freshdesk.com/api/_/conversations/${event.target.getAttribute('html-id')}`)
-                            .then(d => d.json())
-                            .then(function(text) {
-                            document.querySelector('body')
-                                .appendChild(document.createElement('div'))
-                                .outerHTML = `<div class="raw-html raw-html-main" style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;"></div>`;
-                            document.querySelector('.raw-html-main').innerText = text.conversation.body;
-                            if (text.conversation.attachments.length > 0 && !document.querySelector('.raw-html-main a')) {
-                                document.querySelector('.raw-html-main').appendChild(document.createElement('span'))
-                                    .outerHTML = `<span style="display: flex;flex-direction: column;"></span>`;
-                                text.conversation.attachments.forEach(function(attachment, i) {
-                                    document.querySelector('.raw-html-main span').appendChild(document.createElement('a'))
-                                        .outerHTML = `<a class="raw-html" target="_blank" href=${attachment.attachment_url}>[${i}] ${attachment.name}</a>`;
-                                })
-                            }
-                        })
+                        if (!e.classList.contains('requestor-wrap')) {
+                            fetch(`https://searchanise.freshdesk.com/api/_/conversations/${event.target.getAttribute('html-id')}`)
+                                .then(d => d.json())
+                                .then(function(text) {
+                                document.querySelector('body')
+                                    .appendChild(document.createElement('div'))
+                                    .outerHTML = `<div class="raw-html raw-html-main" style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;"></div>`;
+                                document.querySelector('.raw-html-main').innerText = text.conversation.body;
+                                if (text.conversation.attachments.length > 0 && !document.querySelector('.raw-html-main a')) {
+                                    document.querySelector('.raw-html-main').appendChild(document.createElement('span'))
+                                        .outerHTML = `<span style="display: flex;flex-direction: column;"></span>`;
+                                    text.conversation.attachments.forEach(function(attachment, i) {
+                                        document.querySelector('.raw-html-main span').appendChild(document.createElement('a'))
+                                            .outerHTML = `<a class="raw-html" target="_blank" href=${attachment.attachment_url}>[${i}] ${attachment.name}</a>`;
+                                    })
+                                }
+                            })
+                        } else {
+                            fetch(`https://searchanise.freshdesk.com/api/_/tickets/${noteID}`)
+                                .then(d => d.json())
+                                .then(function(text) {
+                                document.querySelector('body')
+                                    .appendChild(document.createElement('div'))
+                                    .outerHTML = `<div class="raw-html raw-html-main" style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;"></div>`;
+                                document.querySelector('.raw-html-main').innerText = text.ticket.description;
+                                if (text.ticket.attachments.length > 0 && !document.querySelector('.raw-html-main a')) {
+                                    document.querySelector('.raw-html-main').appendChild(document.createElement('span'))
+                                        .outerHTML = `<span style="display: flex;flex-direction: column;"></span>`;
+                                    text.ticket.attachments.forEach(function(attachment, i) {
+                                        document.querySelector('.raw-html-main span').appendChild(document.createElement('a'))
+                                            .outerHTML = `<a class="raw-html" target="_blank" href=${attachment.attachment_url}>[${i}] ${attachment.name}</a>`;
+                                    })
+                                }
+                            })
+                        }
                     }
                 })
             }
