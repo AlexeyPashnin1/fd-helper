@@ -42,8 +42,16 @@ function addSysClearQuotes() {
                             .then(function(text) {
                             document.querySelector('body')
                                 .appendChild(document.createElement('div'))
-                                .outerHTML = `<div class="raw-html" style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;"></div>`;
-                            document.querySelector('.raw-html').innerText = text.conversation.body;
+                                .outerHTML = `<div class="raw-html raw-html-main" style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;"></div>`;
+                            document.querySelector('.raw-html-main').innerText = text.conversation.body;
+                            if (text.conversation.attachments.length > 0 && !document.querySelector('.raw-html-main a')) {
+                                document.querySelector('.raw-html-main').appendChild(document.createElement('span'))
+                                    .outerHTML = `<span style="display: flex;flex-direction: column;"></span>`;
+                                text.conversation.attachments.forEach(function(attachment, i) {
+                                    document.querySelector('.raw-html-main span').appendChild(document.createElement('a'))
+                                        .outerHTML = `<a class="raw-html" target="_blank" href=${attachment.attachment_url}>[${i}] ${attachment.name}</a>`;
+                                })
+                            }
                         })
                     }
                 })
