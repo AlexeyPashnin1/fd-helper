@@ -37,7 +37,7 @@ function addSysClearQuotes() {
                         </span>`;
                 }
                 e.querySelector('.created-time').appendChild(document.createElement("span"))
-                    .outerHTML = `<span class="show-raw" html-id="${noteID} "onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer; color: inherit; position: absolute; top: 18px; left: 0px;">show raw HTML</span>`;
+                    .outerHTML = `<span class="show-raw" html-id="${noteID} "onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer; color: inherit; position: absolute; top: 18px; left: 0px;">show raw HTML test</span>`;
                 e.querySelector('.created-time .show-raw').addEventListener('click', function(event) {
                     if (!document.querySelector('.raw-html')) {
                         if (!e.classList.contains('requestor-wrap')) {
