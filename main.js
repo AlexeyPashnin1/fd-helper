@@ -159,6 +159,7 @@ function showTimer() {
                 <button style="padding: 0px 8px;height: 100%;position: absolute;right: 0;border-left: 1px solid black!important;cursor: pointer; font-size: 25px;border: none; background: none;"onmouseover="this.style.color='red';"onmouseout="this.style.color='black'">X</button>
                 <span class="tpu timer-log-time" style="cursor: pointer; color: black;" onmouseover="this.style.color='red';" onmouseout="this.style.color='black'">LOG TIME</span>
                 </div>`;
+        localStorage.removeItem(`snizeTimer${ticketID}`);
         localStorage.setItem(`snizeSpentTime${ticketID}`, `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`);
         document.querySelector('.timer-pop-up button').addEventListener('click', function () {
             document.querySelector('.timer-pop-up').remove();
@@ -168,7 +169,6 @@ function showTimer() {
             waitForLog();
             document.querySelector('.timer-pop-up').remove();
         });
-        localStorage.removeItem(`snizeTimer${ticketID}`);
     }
 }
 
