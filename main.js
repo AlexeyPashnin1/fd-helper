@@ -233,7 +233,8 @@ function waitForObserve() {
                             });
                         });
                 }
-                if (document.querySelector('.ticket-action__btn')
+                if (document.querySelector('.ticket-editor__bodytext')
+                    && document.querySelector('.ticket-action__btn')
                     && document.querySelector('.ticket-editor__bodytext')
                 ) {
                     document.querySelectorAll('.ticket-action__btn .btn--primary:not(.dropdown-toggle), .ticket-action__btn .btn--secondary, .ticket-action__btn .discard-draft, .ticket-actions-container button[data-test-conversation-actions="delete"]')
