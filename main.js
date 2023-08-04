@@ -198,9 +198,10 @@ document.addEventListener('mousedown', function (e) {
 
 function waitForObserve() {
     if (document.querySelector('.ember-application')) {
-        if (document.querySelector('.requestor-wrap')) {
-            ticketID = document.querySelector('.requestor-wrap').getAttribute('data-album').replace('ticket_', '');
+        if (!document.querySelector('.requestor-wrap')) {
+            return;
         }
+            ticketID = document.querySelector('.requestor-wrap').getAttribute('data-album').replace('ticket_', '');
         let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         function trackChange(element) {
             var observer = new MutationObserver(function (mutations, observer) {
