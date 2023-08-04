@@ -221,7 +221,9 @@ function waitForObserve() {
                     });
                 }
                 addSysClearQuotes();
-                if (ticketID && !document.querySelector('.timer-pop-up')
+                if (document.querySelector('.ticket-editor__bodytext')
+                    && ticketID
+                    && !document.querySelector('.timer-pop-up')
                     && !localStorage.getItem(`snizeTimer${ticketID}`))
                     localStorage.setItem(`snizeTimer${ticketID}`, new Date());
                 if (document.querySelector('button[aria-label="Reply"]')) {
