@@ -253,10 +253,10 @@ function waitForObserve() {
                 ) {
                     $('.ticket-details-header').prepend(`<span class="check" style="height: 1px;width: 100%;position: absolute;top: 0;"></span>`)
                 }
-                if (localStorage.getItem(`snizeTimer${ticketID}`)) {
-                    $('.ticket-details-header .check').css('background', 'lightgreen');
-                } else {
+                if (!localStorage.getItem(`snizeTimer${ticketID}`)) {
                     $('.ticket-details-header .check').css('background', 'red');
+                } else {
+                    $('.ticket-details-header .check').css('background', 'lightgreen');
                 }
             });
             observer.observe(element, {
