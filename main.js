@@ -213,16 +213,16 @@ function waitForObserve() {
         let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         function trackChange(element) {
             var observer = new MutationObserver(function (mutations, observer) {
-                document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)').forEach(function(el, i) {
-                    if (i > 0 && !$('span[data-test-id="conversation-status"]', el).text().includes('hours')) {
-                        let prevConversation = $($('.ticket-details__item:not(.ticket-details__privatenote)')[i-1]);
-                        let currentTime = new Date($('.timeago-units', el).text().replaceAll(/\s*\(|at\s|\)\s/g, ''));
-                        let prevTime = new Date($('.timeago-units', prevConversation).text().replaceAll(/\s*\(|at\s|\)\s/g, ''));
-                        let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
-                        let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
-                        $('span[data-test-id="conversation-status"]', el).text(`replied after ${timeDiffMinutes + timeDiffHours*60} minutes`);
-                    }
-                })
+                // document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)').forEach(function(el, i) {
+                //     if (i > 0 && !$('span[data-test-id="conversation-status"]', el).text().includes('hours')) {
+                //         let prevConversation = $($('.ticket-details__item:not(.ticket-details__privatenote)')[i-1]);
+                //         let currentTime = new Date($('.timeago-units', el).text().replaceAll(/\s*\(|at\s|\)\s/g, ''));
+                //         let prevTime = new Date($('.timeago-units', prevConversation).text().replaceAll(/\s*\(|at\s|\)\s/g, ''));
+                //         let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
+                //         let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
+                //         $('span[data-test-id="conversation-status"]', el).text(`replied after ${timeDiffMinutes + timeDiffHours*60} minutes`);
+                //     }
+                // })
                 if (document.querySelector('#ember-basic-dropdown-wormhole div')
                     && document.querySelector('.ticket-overlay-content-text')
                     && document.querySelector('.ticket-overlay-content-text').innerText.match(/\.\.\.$/)
