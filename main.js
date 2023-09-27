@@ -213,7 +213,7 @@ function waitForObserve() {
         let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         function trackChange(element) {
             var observer = new MutationObserver(function (mutations, observer) {
-                if (document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)').length) {
+                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length) {
                     document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)').forEach(function(el, i) {
                         if (i > 0 && !$('span[data-test-id="conversation-status"]', el).text().includes('hours')) {
                             let prevConversation = $($('.ticket-details__item:not(.ticket-details__privatenote)')[i-1]);
