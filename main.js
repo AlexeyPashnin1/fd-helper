@@ -220,7 +220,7 @@ function waitForObserve() {
                         let prevTime = new Date($('.timeago-units', prevConversation).text().replaceAll(/\s*\(|at\s|\)\s/g, ''));
                         let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
                         let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
-                        console.log($('span[data-test-id="conversation-status"]', el).text(`replied after ${timeDiffHours} hours ${timeDiffMinutes} minutes`));
+                        console.log($('span[data-test-id="conversation-status"]', el).text(`replied after ${timeDiffMinutes + timeDiffHours*60} minutes`));
                     }
                 })
                 if (document.querySelector('#ember-basic-dropdown-wormhole div')
