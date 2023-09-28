@@ -245,9 +245,9 @@ function waitForObserve() {
                 if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 1
                    && !document.querySelectorAll('span[data-test-id="conversation-status"]')[1].innerText.includes('minutes')
                    ) {
-                    addReplyAfterText();
+                    // addReplyAfterText();
                 } else if (!checking && !document.querySelectorAll('.ticket-details__item--more').length) {
-                    addReplyAfterText();
+                    // addReplyAfterText();
                     checking = true;
                 }
                 addSysClearQuotes();
