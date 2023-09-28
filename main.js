@@ -242,8 +242,8 @@ function waitForObserve() {
                             .then(text => document.querySelector('.ticket-overlay-content-text').innerHTML = text.conversation.body_text);
                     });
                 }
-                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 0
-                   && !document.querySelector('span[data-test-id="conversation-status"]').innerText.includes('minutes')
+                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 1
+                   && !document.querySelectorAll('span[data-test-id="conversation-status"]')[1].innerText.includes('minutes')
                    ) {
                     addReplyAfterText();
                 } else if (!checking && !document.querySelectorAll('.ticket-details__item--more').length) {
