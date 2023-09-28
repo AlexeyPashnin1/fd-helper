@@ -205,6 +205,19 @@ document.addEventListener('mousedown', function (e) {
     }
 });
 
+function addReplyAfterText() {
+    document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)').forEach(function(el, i) {
+        if (i > 0) {
+            let prevConversation = document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)')[i-1];
+            let currentTime = new Date(el.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
+            let prevTime = new Date(prevConversation.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
+            let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
+            let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
+            el.querySelector('span[data-test-id="conversation-status"]').innerText = `replied after ${timeDiffMinutes + timeDiffHours*60} minutes`;
+        }
+    })
+}
+
 function waitForObserve() {
     if (document.querySelector('.ember-application')) {
         if (document.querySelector('.requestor-wrap')) {
@@ -213,18 +226,6 @@ function waitForObserve() {
         let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         function trackChange(element) {
             var observer = new MutationObserver(function (mutations, observer) {
-                // if (document.querySelectorAll('span[data-test-id="conversation-status"]').length) {
-                //     document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)').forEach(function(el, i) {
-                //         if (i > 0 && !$('span[data-test-id="conversation-status"]', el).text().includes('hours')) {
-                //             let prevConversation = $($('.ticket-details__item:not(.ticket-details__privatenote)')[i-1]);
-                //             let currentTime = new Date($('.timeago-units', el).text().replaceAll(/\s*\(|at\s|\)\s/g, ''));
-                //             let prevTime = new Date($('.timeago-units', prevConversation).text().replaceAll(/\s*\(|at\s|\)\s/g, ''));
-                //             let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
-                //             let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
-                //             $('span[data-test-id="conversation-status"]', el).text(`replied after ${timeDiffMinutes + timeDiffHours*60} minutes`);
-                //         }
-                //     })
-                // }
                 if (document.querySelector('#ember-basic-dropdown-wormhole div')
                     && document.querySelector('.ticket-overlay-content-text')
                     && document.querySelector('.ticket-overlay-content-text').innerText.match(/\.\.\.$/)
@@ -240,6 +241,14 @@ function waitForObserve() {
                             .then(d => d.json())
                             .then(text => document.querySelector('.ticket-overlay-content-text').innerHTML = text.conversation.body_text);
                     });
+                }
+                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 0
+                   && !document.querySelector('span[data-test-id="conversation-status"]').innerText.includes('minutes')
+                   ) {
+                    addReplyAfterText();
+                } else if (!checking && !document.querySelectorAll('.ticket-details__item--more').length) {
+                    addReplyAfterText();
+                    checking = true;
                 }
                 addSysClearQuotes();
                 if (document.querySelector('.ticket-editor__bodytext')
