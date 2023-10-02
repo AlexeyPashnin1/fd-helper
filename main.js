@@ -206,14 +206,21 @@ document.addEventListener('mousedown', function (e) {
 });
 
 function addReplyAfterText() {
-    document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)').forEach(function(el, i) {
-        if (i > 0) {
+    document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote, .after-added)').forEach(function(el, i) {
+        if (i > 0 && !document.querySelector('.ticket-details__item--more')
+            || Array.prototype.indexOf.call(el.parentNode.children, el) > 0 && !el.previousElementSibling.classList.contains('ticket-details__privatenote')
+            || Array.prototype.indexOf.call(el.parentNode.children, el) > 1
+           ) {
             let prevConversation = document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)')[i-1];
             let currentTime = new Date(el.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
             let prevTime = new Date(prevConversation.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
+            let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
             let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
             let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
-            el.querySelector('span[data-test-id="conversation-status"]').innerText = `replied after ${timeDiffMinutes + timeDiffHours*60} minutes`;
+            let mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
+            let additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours*60} minutes)` : `${timeDiffMinutes + timeDiffHours*60} minutes`
+            el.querySelector('span[data-test-id="conversation-status"]').innerText = `replied after ${mainText} ${additionalText}`;
+            el.classList.add("after-added");
         }
     })
 }
@@ -242,13 +249,8 @@ function waitForObserve() {
                             .then(text => document.querySelector('.ticket-overlay-content-text').innerHTML = text.conversation.body_text);
                     });
                 }
-                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 1
-                   && !document.querySelectorAll('span[data-test-id="conversation-status"]')[1].innerText.includes('minutes')
-                   ) {
-                    // addReplyAfterText();
-                } else if (!checking && !document.querySelectorAll('.ticket-details__item--more').length) {
-                    // addReplyAfterText();
-                    checking = true;
+                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 1) {
+                    addReplyAfterText();
                 }
                 addSysClearQuotes();
                 if (document.querySelector('.ticket-editor__bodytext')
