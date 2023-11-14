@@ -25,15 +25,15 @@ function clearQuotes() {
 }
 
 function addSysClearQuotes() {
-    setTimeout(function() {
-        if (
-            document.querySelector('.surveys:not(.fixed) .ticket-editor__action')
-            && !document.querySelector('.surveys .ticket-editor__action').classList.contains('ticket-editor__action--active')
-        ) {
-                document.querySelector('.surveys').classList.add('fixed');
-                document.querySelector('.surveys .ticket-editor__action').click();
-        }
-    }, 0)
+    if (
+        document.querySelector('.surveys:not(.fixed) .ticket-editor__action')
+        && !document.querySelector('.surveys .ticket-editor__action').classList.contains('ticket-editor__action--active')
+    ) {
+        document.querySelector('.surveys').classList.add('fixed');
+        setTimeout(function () {
+            document.querySelector('.surveys button').click();
+        }, 2000)
+    }
     if (!document.querySelector('.conversation-dotted-loader')) {
         document.querySelectorAll('div[data-test-id="conversation-wrapper"], .requestor-wrap').forEach(function (e) {
             let noteID = e.getAttribute('data-album').replace('note_', '').replace('ticket_', '');
