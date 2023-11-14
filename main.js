@@ -32,6 +32,7 @@ function addSysClearQuotes() {
         document.querySelector('.surveys').classList.add('fixed');
         setTimeout(function() {
             document.querySelector('.surveys .ticket-editor__action').click();
+            console.log('WOW')
         }, 0)
     }
     if (!document.querySelector('.conversation-dotted-loader')) {
