@@ -31,6 +31,7 @@ function addSysClearQuotes() {
     ) {
         document.querySelector('.surveys .ticket-editor__action').click();
         document.querySelector('.surveys').classList.add('fixed');
+        console.log('WOW')
     }
     if (!document.querySelector('.conversation-dotted-loader')) {
         document.querySelectorAll('div[data-test-id="conversation-wrapper"], .requestor-wrap').forEach(function (e) {
