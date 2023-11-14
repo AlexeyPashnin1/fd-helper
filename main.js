@@ -31,9 +31,7 @@ function addSysClearQuotes() {
             && !document.querySelector('.surveys .ticket-editor__action').classList.contains('ticket-editor__action--active')
         ) {
                 document.querySelector('.surveys').classList.add('fixed');
-                // document.querySelector('.surveys .ticket-editor__action').click();
-            document.querySelector('.surveys .ticket-editor__action').dispatchEvent(new Event('click', { 'bubbles': true }));
-                console.log('WOW')
+                document.querySelector('.surveys .ticket-editor__action').click();
         }
     }, 0)
     if (!document.querySelector('.conversation-dotted-loader')) {
