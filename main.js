@@ -29,9 +29,9 @@ function addSysClearQuotes() {
         document.querySelector('.surveys:not(.fixed) .ticket-editor__action')
         && !document.querySelector('.surveys .ticket-editor__action').classList.contains('ticket-editor__action--active')
     ) {
+        document.querySelector('.surveys').classList.add('fixed');
         setTimeout(function() {
             document.querySelector('.surveys .ticket-editor__action').click();
-            document.querySelector('.surveys').classList.add('fixed');
         }, 0)
     }
     if (!document.querySelector('.conversation-dotted-loader')) {
