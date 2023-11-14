@@ -34,7 +34,7 @@ function addSysClearQuotes() {
             document.querySelector('.surveys .ticket-editor__action').click();
             console.log('WOW')
     }
-    }, 0)
+    }, 500)
     if (!document.querySelector('.conversation-dotted-loader')) {
         document.querySelectorAll('div[data-test-id="conversation-wrapper"], .requestor-wrap').forEach(function (e) {
             let noteID = e.getAttribute('data-album').replace('note_', '').replace('ticket_', '');
