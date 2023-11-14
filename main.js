@@ -25,6 +25,13 @@ function clearQuotes() {
 }
 
 function addSysClearQuotes() {
+    if (
+        document.querySelector('.surveys:not(.fixed) .ticket-editor__action')
+        && !document.querySelector('.surveys .ticket-editor__action').classList.contains('ticket-editor__action--active')
+    ) {
+        document.querySelector('.surveys .ticket-editor__action').click();
+        document.querySelector('.surveys').classList.add('fixed');
+    }
     if (!document.querySelector('.conversation-dotted-loader')) {
         document.querySelectorAll('div[data-test-id="conversation-wrapper"], .requestor-wrap').forEach(function (e) {
             let noteID = e.getAttribute('data-album').replace('note_', '').replace('ticket_', '');
