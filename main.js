@@ -261,7 +261,7 @@ function waitForObserve() {
                 if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 1) {
                     addReplyAfterText();
                 }
-                if (document.querySelector('.fr-recentCode') {
+                if (document.querySelector('.fr-recentCode')) {
                     document.querySelectorAll('.fr-recentCode').forEach(function(el) {
                         if (el.parentNode.tagName == 'DIV' && el.innerHTML.split('\n').length > 30)
                             el.outerHTML = '<details>' + el.outerHTML + '</details>';
