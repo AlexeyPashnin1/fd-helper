@@ -262,7 +262,7 @@ function waitForObserve() {
                     addReplyAfterText();
                 }
                 if (document.querySelector('.fr-recentCode')) {
-                    document.querySelectorAll('.fr-recentCode').forEach(function(el) {
+                    document.querySelectorAll('.fr-recentCode, [rel="highlighter"]').forEach(function(el) {
                         if (el.parentNode.tagName == 'DIV' && el.innerHTML.split('\n').length > 30)
                             el.outerHTML = '<details>' + el.outerHTML + '</details>';
                     });
