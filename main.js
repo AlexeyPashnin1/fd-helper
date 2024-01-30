@@ -308,6 +308,22 @@ function waitForObserve() {
                             el.outerHTML = '<details>' + el.outerHTML + '</details>';
                     });
                 }
+                let selectedPlatform = document.querySelector('[data-test-id="Platform"] .ember-power-select-selected-item').innerText;
+                if (
+                    ['Woocommerce', 'Wix'].includes(selectedPlatform)
+                    && document.querySelector('.ticket-editor__footer')
+                    && !document.querySelector('.review-request')
+                ) {
+                    document.querySelector('.ticket-editor__footer').insertAdjacentHTML('afterend', `<span style="
+                        float: right;
+                        color: white;
+                        background: red;
+                        text-align: center;
+                        width: 100%;
+                        font-weight: 700;" class="review-request">
+                        This is a ${selectedPlatform} platform, you can request positive or 5-star review directly or in exchange for something from our side
+                        </span>`);
+                }
                 addSysClearQuotes();
                 if (document.querySelector('.ticket-editor__bodytext')
                     && ticketID
