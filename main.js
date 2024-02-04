@@ -283,6 +283,7 @@ function waitForObserve() {
         let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         function trackChange(element) {
             var observer = new MutationObserver(function (mutations, observer) {
+                console.log('upd')
                 if (document.querySelector('#ember-basic-dropdown-wormhole div')
                     && document.querySelector('.ticket-overlay-content-text')
                     && document.querySelector('.ticket-overlay-content-text').innerText.match(/\.\.\.$/)
