@@ -115,6 +115,27 @@ function addSysClearQuotes() {
             }
         });
         let engineIDFromText = document.querySelector('#ticket_original_request').innerText.split('Engine id:')[1] || false;
+        if (
+            document.querySelector('[data-test-id="requester-info-contact-client_notes"]')
+            && !document.querySelector('.links-added')
+        ) {
+            let clientNotesContent = document.querySelector('[data-test-id="requester-info-contact-client_notes"] .info-details-content');
+            clientNotesContent.classList.add('links-added');
+            clientNotesContent.innerText.split(/\\n|\s/)
+                .forEach(function (el) {
+                if (el.match(/http.*\\|http.*$/g)) {
+                    let textToReplace = el.match(/http.*\\|http.*$/g)[0];
+                    let textWithLink = `<a target="_blank" href="${textToReplace}">${textToReplace}</a>`
+                    clientNotesContent.innerHTML = clientNotesContent.innerHTML.replace(textToReplace, textWithLink);
+                    if (
+                        !engineIDFromText
+                        && el.match(/syspanel\.searchserverapi\.com/)
+                    ) {
+                        engineIDFromText = el.match(/\d+/)[0];
+                    }
+                }
+            })
+        }
         if (engineIDFromText) {
             let engineID = engineIDFromText.match(/[0-9]{5,}/);
             document.querySelector('.status-cards-container')
