@@ -236,17 +236,16 @@ document.addEventListener('mousedown', function (e) {
 });
 
 function addReplyAfterText() {
-    document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote, .after-added)').forEach(function (el, i) {
+    document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote, .after-added, .ticket-description)').forEach(function (el, i) {
         if (
             (
-                !(document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote, .after-added)').length == 2
+                !(document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote, .after-added, .ticket-description)').length == 2
                   && document.querySelectorAll('.ticket-details__privatenote').length == 2)
             )
             &&
             (
-                i > 0 && !document.querySelector('.ticket-details__item--more')
+                !document.querySelector('.ticket-details__item--more')
                 || Array.prototype.indexOf.call(el.parentNode.children, el) > 0 && !el.previousElementSibling.classList.contains('ticket-details__privatenote')
-                || Array.prototype.indexOf.call(el.parentNode.children, el) > 1
             )
         ) {
             let prevNote;
@@ -268,7 +267,7 @@ function addReplyAfterText() {
                 prevNoteAdditionalText = prevNoteText != '' ? `(${prevNoteDiffMinutes + prevNoteDiffHours * 60} minutes)` : `${prevNoteDiffMinutes + prevNoteDiffHours * 60} minutes`;
                 prevNoteMainText = `(${prevNoteText} ${prevNoteAdditionalText} after note)`;
             }
-            let prevConversation = document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)')[i - 1];
+            let prevConversation = document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)')[i];
             let prevTime = new Date(prevConversation.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
             let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
             let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
@@ -320,7 +319,7 @@ function waitForObserve() {
                             .then(text => document.querySelector('.ticket-overlay-content-text').innerHTML = text.conversation.body_text);
                     });
                 }
-                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length > 1) {
+                if (document.querySelectorAll('span[data-test-id="conversation-status"]').length >= 1) {
                     addReplyAfterText();
                 }
                 if (document.querySelector('.fr-recentCode')) {
