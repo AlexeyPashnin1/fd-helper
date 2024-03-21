@@ -248,6 +248,7 @@ function addReplyAfterText() {
                 || Array.prototype.indexOf.call(el.parentNode.children, el) > 0 && !el.previousElementSibling.classList.contains('ticket-details__privatenote')
             )
         ) {
+            console.log('upd')
             let prevNote;
             let prevNoteTime;
             let prevNoteDiffDays;
