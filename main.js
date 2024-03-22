@@ -235,62 +235,95 @@ document.addEventListener('mousedown', function (e) {
     }
 });
 
-function addReplyAfterText() {
-    document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote, .after-added, .ticket-description)').forEach(function (el, i) {
-        if (
-            (
-                !(document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote, .after-added, .ticket-description)').length == 2
-                  && document.querySelectorAll('.ticket-details__privatenote').length == 2)
-            )
-            &&
-            (
-                !document.querySelector('.ticket-details__item--more')
-                || Array.prototype.indexOf.call(el.parentNode.children, el) > 0 && !el.previousElementSibling.classList.contains('ticket-details__privatenote')
-            )
-        ) {
-            let prevNote;
-            let prevNoteTime;
-            let prevNoteDiffDays;
-            let prevNoteDiffHours;
-            let prevNoteDiffMinutes;
-            let prevNoteText;
-            let prevNoteAdditionalText;
-            let prevNoteMainText = '';
-            let currentTime = new Date(el.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
-            if (el.previousElementSibling && el.previousElementSibling.classList.contains('ticket-details__privatenote')) {
-                prevNote = el.previousElementSibling;
-                prevNoteTime = new Date(prevNote.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
-                prevNoteDiffDays = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60 * 24));
-                prevNoteDiffHours = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60));
-                prevNoteDiffMinutes = Math.floor((currentTime - prevNoteTime) / (1000 * 60)) % 60;
-                prevNoteText = prevNoteDiffDays > 0 ? `${prevNoteDiffDays}d ${prevNoteDiffHours % 24}h ${prevNoteDiffMinutes}m` : prevNoteDiffHours > 0 ? `${prevNoteDiffHours}h ${prevNoteDiffMinutes}m` : '';
-                prevNoteAdditionalText = prevNoteText != '' ? `(${prevNoteDiffMinutes + prevNoteDiffHours * 60} minutes)` : `${prevNoteDiffMinutes + prevNoteDiffHours * 60} minutes`;
-                prevNoteMainText = `(${prevNoteText} ${prevNoteAdditionalText} after note)`;
-            }
-            let prevConversation = document.querySelectorAll('.ticket-details__item:not(.ticket-details__privatenote)')[i];
-            let prevTime = new Date(prevConversation.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
-            let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
-            let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
-            let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
-            let mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
-            let additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`
-            el.querySelector('span[data-test-id="conversation-status"]').innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
-            el.classList.add("after-added");
+let allConversations;
+async function getConversationsData() {
+    ticketID = document.querySelector('.requestor-wrap').getAttribute('data-album').replace('ticket_', '');
+    await new Promise(function (resolve, reject) {
+        if (allConversations) {
+            addReplyAfterText();
+            return;
         }
-    })
 
-    document.querySelectorAll('.ticket-details__item.ticket-details__privatenote:not(.after-added)').forEach(function (el, i) {
-        if (el.previousElementSibling && el.previousElementSibling.classList.contains('ticket-details__privatenote')) {
-            let prevNote = el.previousElementSibling;
-            let currentTime = new Date(el.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
-            let prevTime = new Date(prevNote.querySelector('.timeago-units').innerText.replaceAll(/\s*\(|at\s|\)/g, ''));
-            let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
-            let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
-            let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
-            let mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
-            let additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`
-            el.querySelector('span[data-test-id="conversation-status"]').innerText = `note to note after ${mainText} ${additionalText}`;
-            el.classList.add("after-added");
+        fetch(`https://searchanise.freshdesk.com/api/_/tickets/${ticketID}`)
+            .then(first_response => first_response.json())
+            .then(function (ticket_description) {
+                fetch(`https://searchanise.freshdesk.com/api/_/tickets/${ticketID}/conversations`)
+                    .then(second_response => second_response.json())
+                    .then(function (ticket_conversations) {
+                        allConversations = ticket_conversations.conversations
+                        allConversations.unshift(ticket_description.ticket);
+                        resolve(allConversations);
+                    })
+            })
+    });
+
+    addReplyAfterText();
+}
+
+function addReplyAfterText() {
+    allConversations.forEach(function (message, index) {
+        if (conversation = document.querySelector(`[data-album="note_${message.id}"]:not(.after-added)`)) {
+            let conversationStatus = conversation.querySelector('span[data-test-id="conversation-status"]');
+            let currentTime = new Date(message.created_at);
+            let prevNoteMainText = '';
+            let mainText = '';
+            let additionalText = '';
+            if (allConversations[index - 1]) {
+                if (allConversations[index - 1].private) {
+                    if (message.private) {
+                        for (let k = index - 1; k > 0; k--) {
+                            if (allConversations[k].private) {
+                                let prevNote = allConversations[k];
+                                let prevNoteTime = new Date(prevNote.created_at);
+                                let timeDiffDays = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60 * 24));
+                                let timeDiffHours = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60));
+                                let timeDiffMinutes = Math.round((currentTime - prevNoteTime) / (1000 * 60)) % 60;
+                                mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
+                                additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`
+                                conversationStatus.innerText = `note to note after ${mainText} ${additionalText}`;
+                                break;
+                            }
+                        }
+                    } else {
+                        for (let k = index - 1; k > 0; k--) {
+                            if (!allConversations[k].private || allConversations[k].description) {
+                                let prevConversation = allConversations[k];
+                                let prevConversationTime = new Date(prevConversation.created_at);
+                                let timeDiffDays = Math.floor((currentTime - prevConversationTime) / (1000 * 60 * 60 * 24));
+                                let timeDiffHours = Math.floor((currentTime - prevConversationTime) / (1000 * 60 * 60));
+                                let timeDiffMinutes = Math.floor((currentTime - prevConversationTime) / (1000 * 60)) % 60;
+
+                                let prevNote = allConversations[k + 1];
+                                let prevNoteTime = new Date(prevNote.created_at);
+                                let timeNoteDiffDays = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60 * 24));
+                                let timeNoteDiffHours = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60));
+                                let timeNoteDiffMinutes = Math.floor((currentTime - prevNoteTime) / (1000 * 60)) % 60;
+
+                                let prevNoteText = timeNoteDiffDays > 0 ? `${timeNoteDiffDays}d ${timeNoteDiffHours % 24}h ${timeNoteDiffMinutes}m` : timeNoteDiffHours > 0 ? `${timeNoteDiffHours}h ${timeNoteDiffMinutes}m` : '';
+                                let prevNoteAdditionalText = prevNoteText != '' ? `(${timeNoteDiffMinutes + timeNoteDiffHours * 60} minutes)` : `${timeNoteDiffMinutes + timeNoteDiffHours * 60} minutes`;
+                                prevNoteMainText = `(${prevNoteText} ${prevNoteAdditionalText} after note)`;
+
+                                mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
+                                additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
+                                conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
+                                break;
+                            }
+                        }
+                    }
+                } else if (!message.private) {
+                    let prevConversation = allConversations[index - 1];
+                    if (!mainText) {
+                        let prevTime = new Date(prevConversation.created_at);
+                        let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
+                        let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
+                        let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
+                        mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
+                        additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
+                        conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
+                    }
+                }
+                conversation.classList.add("after-added");
+            }
         }
     })
 }
@@ -320,7 +353,7 @@ function waitForObserve() {
                     });
                 }
                 if (document.querySelectorAll('span[data-test-id="conversation-status"]').length >= 1) {
-                    addReplyAfterText();
+                    getConversationsData();
                 }
                 if (document.querySelector('.fr-recentCode')) {
                     document.querySelectorAll('.fr-recentCode, [rel="highlighter"]').forEach(function(el) {
