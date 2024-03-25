@@ -319,17 +319,17 @@ function addReplyAfterText() {
                         additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
                         conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
                     }
-                }
-            } else if (!message.private) {
-                let prevConversation = allConversations[index - 1];
-                if (!mainText) {
-                    let prevTime = new Date(prevConversation.created_at);
-                    let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
-                    let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
-                    let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
-                    mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
-                    additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
-                    conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
+                } else if (!message.private) {
+                    let prevConversation = allConversations[index - 1];
+                    if (!mainText) {
+                        let prevTime = new Date(prevConversation.created_at);
+                        let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
+                        let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
+                        let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
+                        mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
+                        additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
+                        conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
+                    }
                 }
             }
             conversation.classList.add("after-added");
