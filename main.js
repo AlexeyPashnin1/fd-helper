@@ -285,45 +285,54 @@ function addReplyAfterText() {
                             }
                         }
                     } else {
+                        let prevConversation;
+                        let prevConversationTime;
+                        let timeDiffDays;
+                        let timeDiffHours;
+                        let timeDiffMinutes;
+                        let prevNote;
+                        let prevNoteTime;
+                        let timeNoteDiffDays;
+                        let timeNoteDiffHours;
+                        let timeNoteDiffMinutes;
                         for (let k = index - 1; k > 0; k--) {
                             if (!allConversations[k].private || allConversations[k].description) {
-                                let prevConversation = allConversations[k];
-                                let prevConversationTime = new Date(prevConversation.created_at);
-                                let timeDiffDays = Math.floor((currentTime - prevConversationTime) / (1000 * 60 * 60 * 24));
-                                let timeDiffHours = Math.floor((currentTime - prevConversationTime) / (1000 * 60 * 60));
-                                let timeDiffMinutes = Math.floor((currentTime - prevConversationTime) / (1000 * 60)) % 60;
-
-                                let prevNote = allConversations[k + 1];
-                                let prevNoteTime = new Date(prevNote.created_at);
-                                let timeNoteDiffDays = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60 * 24));
-                                let timeNoteDiffHours = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60));
-                                let timeNoteDiffMinutes = Math.floor((currentTime - prevNoteTime) / (1000 * 60)) % 60;
-
-                                let prevNoteText = timeNoteDiffDays > 0 ? `${timeNoteDiffDays}d ${timeNoteDiffHours % 24}h ${timeNoteDiffMinutes}m` : timeNoteDiffHours > 0 ? `${timeNoteDiffHours}h ${timeNoteDiffMinutes}m` : '';
-                                let prevNoteAdditionalText = prevNoteText != '' ? `(${timeNoteDiffMinutes + timeNoteDiffHours * 60} minutes)` : `${timeNoteDiffMinutes + timeNoteDiffHours * 60} minutes`;
-                                prevNoteMainText = `(${prevNoteText} ${prevNoteAdditionalText} after note)`;
-
-                                mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
-                                additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
-                                conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
+                                prevConversation = allConversations[k];
+                                prevConversationTime = new Date(prevConversation.created_at);
+                                timeDiffDays = Math.floor((currentTime - prevConversationTime) / (1000 * 60 * 60 * 24));
+                                timeDiffHours = Math.floor((currentTime - prevConversationTime) / (1000 * 60 * 60));
+                                timeDiffMinutes = Math.floor((currentTime - prevConversationTime) / (1000 * 60)) % 60;
                                 break;
+                            } else {
+                                prevNote = allConversations[k + 1];
+                                prevNoteTime = new Date(prevNote.created_at);
+                                timeNoteDiffDays = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60 * 24));
+                                timeNoteDiffHours = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60));
+                                timeNoteDiffMinutes = Math.floor((currentTime - prevNoteTime) / (1000 * 60)) % 60;
                             }
                         }
-                    }
-                } else if (!message.private) {
-                    let prevConversation = allConversations[index - 1];
-                    if (!mainText) {
-                        let prevTime = new Date(prevConversation.created_at);
-                        let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
-                        let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
-                        let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
+                        let prevNoteText = timeNoteDiffDays > 0 ? `${timeNoteDiffDays}d ${timeNoteDiffHours % 24}h ${timeNoteDiffMinutes}m` : timeNoteDiffHours > 0 ? `${timeNoteDiffHours}h ${timeNoteDiffMinutes}m` : '';
+                        let prevNoteAdditionalText = prevNoteText != '' ? `(${timeNoteDiffMinutes + timeNoteDiffHours * 60} minutes)` : `${timeNoteDiffMinutes + timeNoteDiffHours * 60} minutes`;
+                        prevNoteMainText = `(${prevNoteText} ${prevNoteAdditionalText} after note)`;
+
                         mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
                         additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
                         conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
                     }
                 }
-                conversation.classList.add("after-added");
+            } else if (!message.private) {
+                let prevConversation = allConversations[index - 1];
+                if (!mainText) {
+                    let prevTime = new Date(prevConversation.created_at);
+                    let timeDiffDays = Math.floor((currentTime - prevTime) / (1000 * 60 * 60 * 24));
+                    let timeDiffHours = Math.floor((currentTime - prevTime) / (1000 * 60 * 60));
+                    let timeDiffMinutes = Math.round((currentTime - prevTime) / (1000 * 60)) % 60;
+                    mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
+                    additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`;
+                    conversationStatus.innerText = `replied after ${mainText} ${additionalText} ` + prevNoteMainText;
+                }
             }
+            conversation.classList.add("after-added");
         }
     })
 }
