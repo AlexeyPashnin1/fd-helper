@@ -303,8 +303,8 @@ function addReplyAfterText() {
                                 timeDiffHours = Math.floor((currentTime - prevConversationTime) / (1000 * 60 * 60));
                                 timeDiffMinutes = Math.floor((currentTime - prevConversationTime) / (1000 * 60)) % 60;
                                 break;
-                            } else {
-                                prevNote = allConversations[k + 1];
+                            } else if (!prevNote) {
+                                prevNote = allConversations[k];
                                 prevNoteTime = new Date(prevNote.created_at);
                                 timeNoteDiffDays = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60 * 24));
                                 timeNoteDiffHours = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60));
