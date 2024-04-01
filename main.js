@@ -295,7 +295,7 @@ function addReplyAfterText() {
                         let timeNoteDiffDays;
                         let timeNoteDiffHours;
                         let timeNoteDiffMinutes;
-                        for (let k = index - 1; k > 0; k--) {
+                        for (let k = index - 1; k >= 0; k--) {
                             if (!allConversations[k].private || allConversations[k].description) {
                                 prevConversation = allConversations[k];
                                 prevConversationTime = new Date(prevConversation.created_at);
