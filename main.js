@@ -16,12 +16,24 @@ function copyLink(event) {
 }
 
 function clearQuotes() {
-    document.querySelectorAll(`.gmail_quote,
-            .x_freshdesk_quote,
-            blockquote,
-            #Zm-_Id_-Sgn1,
-            .mb_sig`)
-        .forEach((e) => { e.style.display = 'none' });
+    if (document.querySelector('.clear-quotes').classList.contains('quotes-show')) {
+        document.querySelector('.clear-quotes').classList.add('quotes-hide');
+        document.querySelector('.clear-quotes').classList.remove('quotes-show');
+        document.querySelector('.clear-quotes').innerText = 'SHOW QUOTES';
+    } else {
+        document.querySelector('.clear-quotes').classList.remove('quotes-hide');
+        document.querySelector('.clear-quotes').classList.add('quotes-show');
+        document.querySelector('.clear-quotes').innerText = 'CLEAR QUOTES';
+    }
+    setTimeout(function() {
+        if (document.querySelector('.quotes-hide') && !document.querySelector('.quotes-hidden')) {
+            document.querySelector('body').classList.add('quotes-hidden');
+            document.querySelector('body').classList.remove('quotes-shown');
+        } else if (document.querySelector('.quotes-show') && !document.querySelector('.quotes-shown')) {
+            document.querySelector('body').classList.add('quotes-shown');
+            document.querySelector('body').classList.remove('quotes-hidden');
+        }
+    }, 0);
 }
 
 function addSysClearQuotes() {
@@ -136,6 +148,8 @@ function addSysClearQuotes() {
                 }
             })
         }
+        let quotesText = document.querySelector('.quotes-hidden') ? 'SHOW QUOTES' : 'CLEAR QUOTES';
+        let quotesClass = document.querySelector('.quotes-hidden') ? 'quotes-hide' : 'quotes-show';
         if (engineIDFromText) {
             let engineID = engineIDFromText.match(/[0-9]{5,}/);
             document.querySelector('.status-cards-container')
@@ -144,14 +158,14 @@ function addSysClearQuotes() {
                     <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/resources/engines/${engineID} target="_blank" rel="noopener noreferrer">SYSPANEL&nbsp;</a>
                     <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/see/${engineID} target="_blank" rel="noopener noreferrer">ADMIN PANEL&nbsp;</a>
                     <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
-                    <a class="clear-quotes" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer;">CLEAR QUOTES</a>
+                    <a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer;">${quotesText}</a>
                     </span>`;
         } else {
             document.querySelector('.status-cards-container')
                 .appendChild(document.createElement("span"))
                 .outerHTML = `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
                     <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
-                    <a class="clear-quotes" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">CLEAR QUOTES</a>
+                    <a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">${quotesText}</a>
                     </span>`;
         }
         document.querySelector('.clear-quotes').removeEventListener('click', clearQuotes);
@@ -363,6 +377,22 @@ function waitForObserve() {
                 }
                 if (document.querySelectorAll('span[data-test-id="conversation-status"]').length >= 1) {
                     getConversationsData();
+                }
+                if (document.querySelector('.clear-quotes') && !document.querySelector('.quotes-style')) {
+                    var css = `.quotes-hidden .gmail_quote,.quotes-hidden .x_freshdesk_quote,.quotes-hidden blockquote,.quotes-hidden #Zm-_Id_-Sgn1,.quotes-hidden .mb_sig { display: none; }
+                    .quotes-shown .gmail_quote,.quotes-shown .x_freshdesk_quote,.quotes-shown blockquote,.quotes-shown #Zm-_Id_-Sgn1,.quotes-shown .mb_sig { display: block; }`,
+                        head = document.head || document.getElementsByTagName('head')[0],
+                        style = document.createElement('style');
+
+                    head.appendChild(style);
+
+                    style.type = 'text/css';
+                    style.classList.add('quotes-style');
+                    if (style.styleSheet){
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(document.createTextNode(css));
+                    }
                 }
                 if (document.querySelector('.fr-recentCode')) {
                     document.querySelectorAll('.fr-recentCode, [rel="highlighter"]').forEach(function(el) {
