@@ -291,7 +291,7 @@ function addReplyAfterText() {
                                 let prevNoteTime = new Date(prevNote.created_at);
                                 let timeDiffDays = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60 * 24));
                                 let timeDiffHours = Math.floor((currentTime - prevNoteTime) / (1000 * 60 * 60));
-                                let timeDiffMinutes = Math.round((currentTime - prevNoteTime) / (1000 * 60)) % 60;
+                                let timeDiffMinutes = Math.floor((currentTime - prevNoteTime) / (1000 * 60)) % 60;
                                 mainText = timeDiffDays > 0 ? `${timeDiffDays}d ${timeDiffHours % 24}h ${timeDiffMinutes}m` : timeDiffHours > 0 ? `${timeDiffHours}h ${timeDiffMinutes}m` : '';
                                 additionalText = mainText != '' ? `(${timeDiffMinutes + timeDiffHours * 60} minutes)` : `${timeDiffMinutes + timeDiffHours * 60} minutes`
                                 conversationStatus.innerText = `note to note after ${mainText} ${additionalText}`;
