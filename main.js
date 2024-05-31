@@ -261,7 +261,7 @@ async function getConversationsData() {
         fetch(`https://searchanise.freshdesk.com/api/_/tickets/${ticketID}`)
             .then(first_response => first_response.json())
             .then(function (ticket_description) {
-                fetch(`https://searchanise.freshdesk.com/api/_/tickets/${ticketID}/conversations`)
+                fetch(`https://searchanise.freshdesk.com/api/_/tickets/${ticketID}/conversations?per_page=100`)
                     .then(second_response => second_response.json())
                     .then(function (ticket_conversations) {
                         allConversations = ticket_conversations.conversations
