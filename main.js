@@ -176,6 +176,7 @@ function addSysClearQuotes() {
         ) {
             return;
         }
+        let engineID = document.querySelectorAll('.main-custom-properties .ember-tooltip-target')[1].innerText;
         if (!engineID.match(/\D/)) {
             document.querySelector('.main-custom-properties .right-column').appendChild(document.createElement("a"));
             document.querySelector('.main-custom-properties .right-column a').outerHTML = `<a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/resources/engines/${engineID} target="_blank" rel="noopener noreferrer" style="color: inherit; font-weight: bold; font-size: larger;">SYSPANEL</a>`;
