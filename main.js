@@ -162,10 +162,10 @@ function addSysClearQuotes() {
   //                   </span>`;
 		// } else {
 		// }
+				// <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
 		document.querySelector('.status-cards-container')
 			.appendChild(document.createElement("span"))
 			.outerHTML = `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
-				<a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
 				<a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">${quotesText}</a>
 				</span>`;
 		document.querySelector('.clear-quotes').removeEventListener('click', clearQuotes);
