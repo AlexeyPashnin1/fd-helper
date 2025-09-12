@@ -126,48 +126,48 @@ function addSysClearQuotes() {
 				clientsEmail = encodeURIComponent(e.nextElementSibling.innerText);
 			}
 		});
-		let engineIDFromText = document.querySelector('#ticket_original_request').innerText.split('Engine id:')[1] || false;
-		if (
-			document.querySelector('[data-test-id="requester-info-contact-client_notes"]')
-			&& !document.querySelector('.links-added')
-		) {
-			let clientNotesContent = document.querySelector('[data-test-id="requester-info-contact-client_notes"] .info-details-content');
-			clientNotesContent.classList.add('links-added');
-			clientNotesContent.innerText.split(/\\n|\s/)
-				.forEach(function (el) {
-					if (el.match(/http.*\\|http.*$/g)) {
-						let textToReplace = el.match(/http.*\\|http.*$/g)[0];
-						let textWithLink = `<a target="_blank" href="${textToReplace}">${textToReplace}</a>`
-						clientNotesContent.innerHTML = clientNotesContent.innerHTML.replace(textToReplace, textWithLink);
-						if (
-							!engineIDFromText
-							&& el.match(/syspanel\.searchserverapi\.com/)
-						) {
-							engineIDFromText = el.match(/\d+/)[0];
-						}
-					}
-				})
-		}
+		// let engineIDFromText = document.querySelector('#ticket_original_request').innerText.split('Engine id:')[1] || false;
+		// if (
+		// 	document.querySelector('[data-test-id="requester-info-contact-client_notes"]')
+		// 	&& !document.querySelector('.links-added')
+		// ) {
+		// 	let clientNotesContent = document.querySelector('[data-test-id="requester-info-contact-client_notes"] .info-details-content');
+		// 	clientNotesContent.classList.add('links-added');
+		// 	clientNotesContent.innerText.split(/\\n|\s/)
+		// 		.forEach(function (el) {
+		// 			if (el.match(/http.*\\|http.*$/g)) {
+		// 				let textToReplace = el.match(/http.*\\|http.*$/g)[0];
+		// 				let textWithLink = `<a target="_blank" href="${textToReplace}">${textToReplace}</a>`
+		// 				clientNotesContent.innerHTML = clientNotesContent.innerHTML.replace(textToReplace, textWithLink);
+		// 				if (
+		// 					!engineIDFromText
+		// 					&& el.match(/syspanel\.searchserverapi\.com/)
+		// 				) {
+		// 					engineIDFromText = el.match(/\d+/)[0];
+		// 				}
+		// 			}
+		// 		})
+		// }
 		let quotesText = document.querySelector('.quotes-hidden') ? 'SHOW QUOTES' : 'CLEAR QUOTES';
 		let quotesClass = document.querySelector('.quotes-hidden') ? 'quotes-hide' : 'quotes-show';
-		if (engineIDFromText) {
-			let engineID = engineIDFromText.match(/[0-9]{5,}/);
-			document.querySelector('.status-cards-container')
-				.appendChild(document.createElement("span"))
-				.outerHTML = `<span class='snize-fd-helper app-icon-btn--text' style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger;padding: 0;"'>
-                    <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/resources/engines/${engineID} target="_blank" rel="noopener noreferrer">SYSPANEL&nbsp;</a>
-                    <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/see/${engineID} target="_blank" rel="noopener noreferrer">ADMIN PANEL&nbsp;</a>
-                    <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
-                    <a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer;">${quotesText}</a>
-                    </span>`;
-		} else {
-			document.querySelector('.status-cards-container')
-				.appendChild(document.createElement("span"))
-				.outerHTML = `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
-                    <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
-                    <a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">${quotesText}</a>
-                    </span>`;
-		}
+		// if (engineIDFromText) {
+		// 	let engineID = engineIDFromText.match(/[0-9]{5,}/);
+		// 	document.querySelector('.status-cards-container')
+		// 		.appendChild(document.createElement("span"))
+		// 		.outerHTML = `<span class='snize-fd-helper app-icon-btn--text' style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger;padding: 0;"'>
+  //                   <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/resources/engines/${engineID} target="_blank" rel="noopener noreferrer">SYSPANEL&nbsp;</a>
+  //                   <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href=https://syspanel.searchserverapi.com/see/${engineID} target="_blank" rel="noopener noreferrer">ADMIN PANEL&nbsp;</a>
+  //                   <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
+  //                   <a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer;">${quotesText}</a>
+  //                   </span>`;
+		// } else {
+		// }
+		document.querySelector('.status-cards-container')
+			.appendChild(document.createElement("span"))
+			.outerHTML = `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
+				<a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" href="https://syspanel.searchserverapi.com/resources/engines?engines_page=1&engines_search=${clientsEmail}" target="_blank" rel="noopener noreferrer">FIND ENGINES</a>
+				<a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">${quotesText}</a>
+				</span>`;
 		document.querySelector('.clear-quotes').removeEventListener('click', clearQuotes);
 		document.querySelector('.clear-quotes').addEventListener('click', clearQuotes);
 	} else if (window.location.href.includes('https://searchanise.freshchat.com/')) {
