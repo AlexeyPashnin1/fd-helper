@@ -1,8 +1,9 @@
 let ticketID;
+let body = document.querySelector("body");
 
 function copyLink(event) {
 	let tmpInput = document.createElement("input");
-	document.querySelector("body").appendChild(tmpInput);
+	body.appendChild(tmpInput);
 	if (event.target.tagName == "A") {
 		tmpInput.value = location.origin + location.pathname + '?note=' + event.target.innerText;
 	} else {
@@ -11,29 +12,48 @@ function copyLink(event) {
 	}
 	tmpInput.select();
 	document.execCommand("copy");
-	document.querySelector("body").removeChild(tmpInput);
+	body.removeChild(tmpInput);
 	event.target.nextElementSibling.style.opacity = 1;
 }
 
 function clearQuotes() {
-	if (document.querySelector('.clear-quotes').classList.contains('quotes-show')) {
-		document.querySelector('.clear-quotes').classList.add('quotes-hide');
-		document.querySelector('.clear-quotes').classList.remove('quotes-show');
-		document.querySelector('.clear-quotes').innerText = 'SHOW QUOTES';
-	} else {
-		document.querySelector('.clear-quotes').classList.remove('quotes-hide');
-		document.querySelector('.clear-quotes').classList.add('quotes-show');
-		document.querySelector('.clear-quotes').innerText = 'CLEAR QUOTES';
-	}
-	setTimeout(function () {
-		if (document.querySelector('.quotes-hide') && !document.querySelector('.quotes-hidden')) {
-			document.querySelector('body').classList.add('quotes-hidden');
-			document.querySelector('body').classList.remove('quotes-shown');
-		} else if (document.querySelector('.quotes-show') && !document.querySelector('.quotes-shown')) {
-			document.querySelector('body').classList.add('quotes-shown');
-			document.querySelector('body').classList.remove('quotes-hidden');
-		}
-	}, 0);
+    let btn = document.querySelector('.clear-quotes');
+    let isShowing = btn.classList.toggle('quotes-show');
+    btn.classList.toggle('quotes-hide', !isShowing);
+    btn.innerText = isShowing ? 'CLEAR QUOTES' : 'SHOW QUOTES';
+
+    body.classList.toggle('quotes-shown', isShowing);
+    body.classList.toggle('quotes-hidden', !isShowing);
+}
+
+function getRawHTML(conversation_link, requestor = false) {
+    body.innerHTML
+        += `<div class="raw-html raw-html-main"
+            style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;">
+            </div>`;
+    fetch(conversation_link)
+        .then(d => d.json())
+        .then(function (text) {
+        let conversationData = requestor ? text.ticket : text.conversation;
+        document.querySelector('.raw-html-main').innerText = requestor ? conversationData.description : conversationData.body;
+        if (conversationData.attachments.length > 0 && !document.querySelector('.raw-html-main a')) {
+            document.querySelector('.raw-html-main').innerHTML += `<span style="display: flex;flex-direction: column;"></span>`;
+            conversationData.attachments.forEach(function (attachment, i) {
+                document.querySelector('.raw-html-main span').innerHTML += `<a class="raw-html" target="_blank" href=${attachment.attachment_url}>[${i}] ${attachment.name}</a>`;
+            })
+        }
+        return true;
+    })
+}
+
+function openRawHTML(show_raw_button, event, noteID) {
+    if (!document.querySelector('.raw-html')) {
+        if (!show_raw_button.classList.contains('requestor-wrap')) {
+            getRawHTML(`https://searchanise.freshdesk.com/api/_/conversations/${event.target.getAttribute('html-id')}`)
+        } else {
+            getRawHTML(`https://searchanise.freshdesk.com/api/_/tickets/${noteID}`, true)
+        }
+    }
 }
 
 function addSysClearQuotes() {
@@ -51,54 +71,29 @@ function addSysClearQuotes() {
 			let noteID = e.getAttribute('data-album').replace('note_', '').replace('ticket_', '');
 			if (e.querySelector('.created-time') && !e.querySelector('.show-raw')) {
 				if (!e.classList.contains('requestor-wrap')) {
-					e.querySelector('.created-time').appendChild(document.createElement("span"))
-						.outerHTML = `<span class="copy-note-link">
+					e.querySelector('.created-time').innerHTML
+                        += `<span class="copy-note-link">
                         <a onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="color: inherit; cursor: pointer;">${noteID}</a>
                         <a class="check" style="opacity: 0; transition-duration: 0.1s;"> ✔</a>
                         </span>`;
 				}
-				e.querySelector('.created-time').appendChild(document.createElement("span"))
-					.outerHTML = `<span class="show-raw" html-id="${noteID} "onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit'" style="cursor: pointer; color: inherit; position: absolute; top: 18px; left: 0px;">show raw HTML</span>`;
-				e.querySelector('.created-time .show-raw').addEventListener('click', function (event) {
-					if (!document.querySelector('.raw-html')) {
-						if (!e.classList.contains('requestor-wrap')) {
-							fetch(`https://searchanise.freshdesk.com/api/_/conversations/${event.target.getAttribute('html-id')}`)
-								.then(d => d.json())
-								.then(function (text) {
-									document.querySelector('body')
-										.appendChild(document.createElement('div'))
-										.outerHTML = `<div class="raw-html raw-html-main" style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;"></div>`;
-									document.querySelector('.raw-html-main').innerText = text.conversation.body;
-									if (text.conversation.attachments.length > 0 && !document.querySelector('.raw-html-main a')) {
-										document.querySelector('.raw-html-main').appendChild(document.createElement('span'))
-											.outerHTML = `<span style="display: flex;flex-direction: column;"></span>`;
-										text.conversation.attachments.forEach(function (attachment, i) {
-											document.querySelector('.raw-html-main span').appendChild(document.createElement('a'))
-												.outerHTML = `<a class="raw-html" target="_blank" href=${attachment.attachment_url}>[${i}] ${attachment.name}</a>`;
-										})
-									}
-								})
-						} else {
-							fetch(`https://searchanise.freshdesk.com/api/_/tickets/${noteID}`)
-								.then(d => d.json())
-								.then(function (text) {
-									document.querySelector('body')
-										.appendChild(document.createElement('div'))
-										.outerHTML = `<div class="raw-html raw-html-main" style="overflow-y: scroll;position: fixed;height: auto;max-height: 80%;width: 50%;top: 10%;left: 10%;z-index: 9;background: white;padding: 25px 15px;box-shadow: 0 0 10px 5px black;word-wrap: break-word;"></div>`;
-									document.querySelector('.raw-html-main').innerText = text.ticket.description;
-									if (text.ticket.attachments.length > 0 && !document.querySelector('.raw-html-main a')) {
-										document.querySelector('.raw-html-main').appendChild(document.createElement('span'))
-											.outerHTML = `<span style="display: flex;flex-direction: column;"></span>`;
-										text.ticket.attachments.forEach(function (attachment, i) {
-											document.querySelector('.raw-html-main span').appendChild(document.createElement('a'))
-												.outerHTML = `<a class="raw-html" target="_blank" href=${attachment.attachment_url}>[${i}] ${attachment.name}</a>`;
-										})
-									}
-								})
-						}
-					}
-				})
+                e.querySelector('.created-time').innerHTML
+                    += `<span class="show-raw"
+                    html-id="${noteID}
+                    "onmouseover="this.style.color='red';
+                    "onmouseout="this.style.color='inherit'"
+                    style="cursor: pointer; color: inherit; position: absolute; top: 18px; left: 0px;">
+                    show raw HTML
+                    </span>`;
 			}
+
+            let showRaw = e.querySelector('.show-raw');
+            if (!showRaw.rawHandler) {
+                showRaw.rawHandler = (event) => openRawHTML(e, event, noteID);
+            } else {
+                showRaw.removeEventListener('click', showRaw.rawHandler);
+            }
+            showRaw.addEventListener('click', showRaw.rawHandler);
 		})
 	}
 	if (document.querySelector('input[data-test-text-field="timeSpentDisp"]')) {
