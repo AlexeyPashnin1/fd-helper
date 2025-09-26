@@ -114,29 +114,24 @@ function addSysClearQuotes() {
 	});
 
 	if (window.location.href.includes('https://searchanise.freshdesk.com/')) {
-		if (!document.querySelector('.status-cards-container')
-			|| !document.querySelector('.info-details-widget .info-details-content')
-			|| document.querySelector('.snize-fd-helper')
-		) {
-			return;
-		}
 		let clientsEmail;
 		document.querySelectorAll('.text__infotext').forEach(function (e) {
 			if (e.innerText == 'Email') {
 				clientsEmail = encodeURIComponent(e.nextElementSibling.innerText);
 			}
 		});
+
+		let statusCont = document.querySelector('.status-cards-container');
 		let quotesText = document.querySelector('.quotes-hidden') ? 'SHOW QUOTES' : 'CLEAR QUOTES';
 		let quotesClass = document.querySelector('.quotes-hidden') ? 'quotes-hide' : 'quotes-show';
 		setTimeout(function() {
-            if (!document.querySelector('.clear-quotes')) {
-                document.querySelector('.status-cards-container')
-                    .appendChild(document.createElement("span"))
-                    .outerHTML = `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
+            if (statusCont && !document.querySelector('.clear-quotes')) {
+                statusCont.innerHTML += `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
                     <a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">${quotesText}</a>
-                    </span>`;
-                document.querySelector('.clear-quotes').removeEventListener('click', clearQuotes);
-                document.querySelector('.clear-quotes').addEventListener('click', clearQuotes);
+                    </span>`
+                let clearQuotesButton = document.querySelector('.clear-quotes');
+                clearQuotesButton.removeEventListener('click', clearQuotes);
+                clearQuotesButton.addEventListener('click', clearQuotes);
             }
         }, 1000);
 	} else if (window.location.href.includes('https://searchanise.freshchat.com/')) {
