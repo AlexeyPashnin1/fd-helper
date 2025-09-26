@@ -128,13 +128,17 @@ function addSysClearQuotes() {
 		});
 		let quotesText = document.querySelector('.quotes-hidden') ? 'SHOW QUOTES' : 'CLEAR QUOTES';
 		let quotesClass = document.querySelector('.quotes-hidden') ? 'quotes-hide' : 'quotes-show';
-		document.querySelector('.status-cards-container')
-			.appendChild(document.createElement("span"))
-			.outerHTML = `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
-				<a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">${quotesText}</a>
-				</span>`;
-		document.querySelector('.clear-quotes').removeEventListener('click', clearQuotes);
-		document.querySelector('.clear-quotes').addEventListener('click', clearQuotes);
+		setTimeout(function() {
+            if (!document.querySelector('.clear-quotes')) {
+                document.querySelector('.status-cards-container')
+                    .appendChild(document.createElement("span"))
+                    .outerHTML = `<span class="snize-fd-helper app-icon-btn--text" style="display: flex;flex-direction: column;align-content: flex-start;font-weight: bold;font-size: larger; padding: 0;">
+                    <a class="clear-quotes ${quotesClass}" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';" style="cursor: pointer;">${quotesText}</a>
+                    </span>`;
+                document.querySelector('.clear-quotes').removeEventListener('click', clearQuotes);
+                document.querySelector('.clear-quotes').addEventListener('click', clearQuotes);
+            }
+        }, 1000);
 	} else if (window.location.href.includes('https://searchanise.freshchat.com/')) {
 		if (!document.querySelector('.main-custom-properties .right-column')
 			|| document.querySelector('.main-custom-properties .right-column a')
