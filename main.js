@@ -109,13 +109,6 @@ function addSysClearQuotes() {
 	});
 
 	if (window.location.href.includes('https://searchanise.freshdesk.com/')) {
-		let clientsEmail;
-		document.querySelectorAll('.text__infotext').forEach(function (e) {
-			if (e.innerText == 'Email') {
-				clientsEmail = encodeURIComponent(e.nextElementSibling.innerText);
-			}
-		});
-
         if (
             document.querySelector('[data-test-id="requester-info-contact-client_notes"]')
             && !document.querySelector('.links-added')
