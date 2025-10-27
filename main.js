@@ -116,7 +116,6 @@ function addSysClearQuotes() {
 			}
 		});
 
-		let engineIDFromText = document.querySelector('#ticket_original_request').innerText.split('Engine id:')[1] || false;
         if (
             document.querySelector('[data-test-id="requester-info-contact-client_notes"]')
             && !document.querySelector('.links-added')
@@ -129,12 +128,6 @@ function addSysClearQuotes() {
                     let textToReplace = el.match(/http.*\\|http.*$/g)[0];
                     let textWithLink = `<a target="_blank" href="${textToReplace}">${textToReplace}</a>`
                     clientNotesContent.innerHTML = clientNotesContent.innerHTML.replace(textToReplace, textWithLink);
-                    if (
-                        !engineIDFromText
-                        && el.match(/syspanel\.searchserverapi\.com/)
-                    ) {
-                        engineIDFromText = el.match(/\d+/)[0];
-                    }
                 }
             })
         }
